@@ -62,11 +62,14 @@ class KNearestNeighbor(object):
         #########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         # test矩阵平法 (p-q)^2 = p^2 + q^2 - 2pq
-        te_2 = (X ** 2).sum(axis=1, keepdims=True)
-        tr_2 = (self.X_train ** 2).sum(axis=1, keepdims=True)
+        # te_2 = (X ** 2).sum(axis=1, keepdims=True)
+        # tr_2 = (self.X_train ** 2).sum(axis=1, keepdims=True)
+        #
+        # te_tr = self.X_train.dot(self.X_train.T)
+        # dists = np.sqrt(te_2 + tr_2 - 2 *te_tr)
 
-        te_tr = self.X_train.dot(self.X_train.T)
-        dists = np.sqrt(te_2 + tr_2 - 2 *te_tr)
+        dists = np.sqrt(
+            (X ** 2).sum(axis=1, keepdims=True) + (self.X_train ** 2).sum(axis=1) - 2 * X.dot(self.X_train.T))
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
 
@@ -83,7 +86,7 @@ class KNearestNeighbor(object):
             #######################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            dists[i, :] = np.sqrt(np.sum(X[i] - self.X_train) ** 2, axis=1)
+            dists[i] = np.sqrt(np.sum((X[i] - self.X_train)**2, axis=1))
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -100,7 +103,8 @@ class KNearestNeighbor(object):
                 # training point, and store the result in dists[i, j]. You should   #
                 # not use a loop over dimension.                                    #
                 #####################################################################
-                dists[i, j] = np.sqrt(np.sum((X[i] - self.X_train[i]) ** 2))
+                # dists[i, j] = np.sqrt(np.sum((X[i] - self.X_train[i]) ** 2))
+                dists[i, j] = np.sqrt(np.sum((X[i] - self.X_train[j])**2))
                 #####################################################################
                 #                       END OF YOUR CODE                            #
                 #####################################################################
